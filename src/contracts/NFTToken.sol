@@ -73,11 +73,6 @@ contract NFTToken is ERC721Enumerable, Ownable{
         require(_isApprovedOrOwner(_msgSender(), _tokenId), "ERC721: transfer caller is not owner nor approved");
         _burn(_tokenId);
     }
-    function airdropNFT(uint256 _tokenId) public {
-        require(_isApprovedOrOwner(_msgSender(), _tokenId), "ERC721: transfer caller is not owner nor approved");
-        _safeMint(msg.sender, _tokenId);
-    }
-
     //function convert tokenID to an image
     function toImage(uint256 tokenId) public view returns(string memory){
         string memory currentBaseURI = _baseURI();
