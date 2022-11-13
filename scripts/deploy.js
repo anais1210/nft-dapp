@@ -4,8 +4,8 @@ const fs = require("fs");
 async function main() {
   const base_uri =
     "https://ipfs.io/ipfs/QmTWbe9wDns7aqZQNCuWh5PqybGbBF91kngC5Zf8qmCoyg/";
-  const Contract = await ethers.getContractFactory("Adulam");
-  const contract = await Contract.deploy("Adulam NFT", "ADM", base_uri);
+  const Contract = await ethers.getContractFactory("NFTToken");
+  const contract = await Contract.deploy("My First NFT", "MFN", base_uri);
 
   await contract.deployed();
 

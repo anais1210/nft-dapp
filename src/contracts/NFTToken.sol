@@ -69,6 +69,14 @@ contract NFTToken is ERC721Enumerable, Ownable{
             block.timestamp
         );
     }
+    function burnNFTT(uint256 _tokenId) public {
+        require(_isApprovedOrOwner(_msgSender(), _tokenId), "ERC721: transfer caller is not owner nor approved");
+        _burn(_tokenId);
+    }
+    function airdropNFT(uint256 _tokenId) public {
+        require(_isApprovedOrOwner(_msgSender(), _tokenId), "ERC721: transfer caller is not owner nor approved");
+        _safeMint(msg.sender, _tokenId);
+    }
 
     //function convert tokenID to an image
     function toImage(uint256 tokenId) public view returns(string memory){
@@ -91,10 +99,11 @@ contract NFTToken is ERC721Enumerable, Ownable{
         return minted[tokenId - 1];
     }
 
+    
     function payTo(address to, uint256 amount) public onlyOwner{
         (bool success1, ) = payable(to).call{value: amount}(""); 
+        require(success1, "Transfer failed");
     }
-
     //changing the location of your image metadata on ipfs
     function setBaseURI(string memory _newBaseURI) public onlyOwner{
         baseURI = _newBaseURI;
