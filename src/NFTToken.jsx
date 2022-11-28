@@ -29,7 +29,7 @@ const isWalletConnected = async () => {
     //get all the account on metamask on the network
     const accounts = await ethereum.request({ method: "eth_accounts" });
     // metamask event reload the browser when we change network
-    windows.ethereum.on("chainChanged", (chainId) => {
+    window.ethereum.on("chainChanged", (chainId) => {
       window.location.reload();
     });
     //method enable you to connect to the account you changed
@@ -55,7 +55,7 @@ const connectWallet = async () => {
     const accounts = await ethereum.request({ method: "eth_requestAccounts" });
     setGlobalState("connectedAccount", accounts[0]);
     await isWalletConnected();
-  } catch {
+  } catch (error) {
     reportError(error);
   }
 };
@@ -63,16 +63,17 @@ const connectWallet = async () => {
 const payToMint = async () => {
   try {
     if (!ethereum) return alert("Please install Metamask");
-    const connectedAccounts = getGlobalState("connectedAccount");
+    const connectedAccount = getGlobalState("connectedAccount");
     const contract = getEthereumContract();
     const amount = ethers.utils.parseEther("0.001");
 
     await contract.payToMint({
-      from: connectedAccounts,
+      from: connectedAccount,
       value: amount._hex,
     });
-  } catch (error) {
+    // await contract.loadNfts();
     window.location.reload();
+  } catch (error) {
     reportError(error);
   }
 };
@@ -82,10 +83,11 @@ const loadNfts = async () => {
     if (!ethereum) return alert("Please install MetaMask");
 
     const contract = getEthereumContract();
-    const nfts = await contract.getAllNfts();
+    const nfts = await contract.getAllNFTs();
 
+    console.log(structureNfts(nfts));
     setGlobalState("nfts", structureNfts(nfts));
-  } catch {
+  } catch (error) {
     reportError(error);
   }
 };
@@ -98,7 +100,7 @@ const structureNfts = (nfts) =>
       buyer: nft.buyer,
       imageURL: nft.imageURL,
       cost: parseInt(nft.cost._hex) / 10 ** 18,
-      timestamp: new Date(nft.timestamp.toNummber()).getTime(),
+      timestamp: new Date(nft.timestamp.toNumber()).getTime(),
     }))
     .reverse();
 
@@ -106,4 +108,4 @@ const reportError = (error) => {
   console.log(error.message);
   throw new Error("No ethereum object");
 };
-export {};
+export { isWalletConnected, connectWallet, payToMint, loadNfts };

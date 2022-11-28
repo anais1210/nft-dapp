@@ -69,7 +69,7 @@ contract NFTToken is ERC721Enumerable, Ownable{
             block.timestamp
         );
     }
-    function burnNFTT(uint256 _tokenId) public {
+    function burnNFT(uint256 _tokenId) public {
         require(_isApprovedOrOwner(_msgSender(), _tokenId), "ERC721: transfer caller is not owner nor approved");
         _burn(_tokenId);
     }
