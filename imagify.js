@@ -8,8 +8,9 @@ const output = "./outputs";
 
 let img_counter = 1;
 const imgSize = { width: 500, height: 500 };
-const desired_ext = ".png";
-const base_url = "https://ipfs.io/ipfs/IPFS_CID_URL";
+const desired_ext = ".webp"; //le most simplified
+const base_url =
+  "https://ipfs.io/ipfs/QmNuvRjh5SwEjaGfMjDiniDbM8NCpyW8dXP3DQeZpMqizF/";
 
 const attributes = {
   weapon: [
@@ -85,13 +86,17 @@ fs.readdirSync(input).forEach((file) => {
     if (fs.existsSync(input + "/" + original_filename)) {
       sharp(`${input}/${original_filename}`)
         .resize(imgSize.width, imgSize.height)
-        .toFile(`${output}/${id + desired_ext}`, (err, info) => {
+        .toFile(`${output}/images/${id + desired_ext}`, (err, info) => {
           console.log(err);
         });
-      fs.writeFileSync(`${output}/${id}.json`, JSON.stringify(metadata), {
-        encoding: "utf8",
-        flag: "w",
-      });
+      fs.writeFileSync(
+        `${output}/metadatas/${id}.json`,
+        JSON.stringify(metadata),
+        {
+          encoding: "utf8",
+          flag: "w",
+        }
+      );
     }
     // console.log(metadata);
     img_counter++;
